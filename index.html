@@ -34,7 +34,7 @@ button:focus-visible{outline:3px solid var(--beta);outline-offset:2px}
 .panel h2{grid-column:1/-1;margin:0;font-size:1.35rem}
 .panel h2 span{color:var(--muted);font-weight:400}
 .board{border:2px solid var(--ink);border-radius:10px;background:var(--bg);min-width:0}
-.board svg{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.board svg{display:block;width:100%;height:auto;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .tools{display:flex;flex-wrap:wrap;gap:8px;padding:10px;border-top:1px solid var(--line)}
 .tools button,.side button{font:inherit;font-size:.95rem;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:7px;padding:6px 12px;cursor:pointer}
 .tools button.on{background:var(--mark)}
@@ -420,23 +420,24 @@ $("t4_free").addEventListener("click",()=>{b4.unknown={};b4.locked=false;$("i_ta
 
 
 <style>
-.erklaer-player{position:sticky;top:0;z-index:30;background:#eaf5f1;border:2px solid #00805f;border-radius:10px;padding:12px 16px;box-shadow:0 3px 12px #00000012;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.erklaer-player{position:sticky;top:0;z-index:1000;background:#eaf5f1;border:2px solid #00805f;border-radius:10px;padding:12px 16px;box-shadow:0 3px 12px #00000012;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .erklaer-player button{font:inherit;font-weight:700;padding:9px 16px;border-radius:7px;border:2px solid #00805f;background:#00805f;color:white;cursor:pointer}
 .erklaer-player button.pause{background:#bd202b;border-color:#bd202b;color:#fff}
 .erklaer-player button.pause:disabled{opacity:.45;cursor:not-allowed}
 .erklaer-player button.stop{background:white;color:#075d48}
 .erklaer-player label{display:flex;align-items:center;gap:8px;font-size:.95rem}
-.erklaer-player select{font:inherit;padding:6px;border:1px solid #637b73;border-radius:6px;background:white}
+.erklaer-player select{font-size:16px;padding:6px;border:1px solid #637b73;border-radius:6px;background:white}
 .erklaer-status{flex-basis:100%;font-size:.92rem;color:#25493e;min-height:1.3em}
 .erklaer-fokus{outline:4px solid #f5b942!important;outline-offset:3px;transition:outline .2s}
-@media(max-width:650px){.erklaer-player{position:relative}.erklaer-player button{padding:7px 10px}}
+@media(max-width:650px){.erklaer-player{position:sticky;top:0;border-radius:0;padding:8px;gap:6px}.erklaer-player button{padding:8px 9px;font-size:14px}.erklaer-player label{font-size:13px}.erklaer-status{font-size:12px;min-height:0}}
+@supports (-webkit-touch-callout:none){html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}.erklaer-player{width:100%;box-sizing:border-box}.erklaer-player button{touch-action:manipulation}.wrap{min-width:0}.board{min-width:0}}
 </style>
 <script>
 (function(){
 'use strict';
 const wrap=document.querySelector('.wrap'),bar=document.createElement('div');bar.className='erklaer-player';
 bar.innerHTML='<button id="erk-start" type="button">▶ Erklärung starten</button><button id="erk-pause" type="button" class="pause" disabled>⏸ Pause</button><button id="erk-stop" type="button" class="stop" disabled>■ Beenden</button><label for="erk-tempo">Sprechtempo <select id="erk-tempo"><option value="0.85">Langsam</option><option value="0.95" selected>Normal</option><option value="1.1">Etwas schneller</option><option value="1.25">Schnell</option></select></label><div class="erklaer-status" id="erk-status" role="status" aria-live="polite">Wähle Erklärung starten oder direkt eines der Kapitel Z1 bis Z4.</div>';
-wrap.insertBefore(bar,wrap.firstChild);
+document.body.insertBefore(bar,document.body.firstChild);
 const start=document.getElementById('erk-start'),pause=document.getElementById('erk-pause'),stop=document.getElementById('erk-stop'),status=document.getElementById('erk-status'),tempo=document.getElementById('erk-tempo');
 const synth=window.speechSynthesis;
 let lauf=0,aktiv=false,pausiert=false,focusEl=null,internalTab=false,currentChapter=1;
